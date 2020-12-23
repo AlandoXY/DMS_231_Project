@@ -24,6 +24,8 @@ namespace Assets.Features.GameManagers
         private List<PlayerInfoData> players = new List<PlayerInfoData>();
         private List<Transform> buildingCoverSpot = new List<Transform>();
 
+        [SerializeField]private PlayerInfoData playerData;
+
         [Title("DEBUG")]
         [ReadOnly, SerializeField] private int battlepointCount;
         [ReadOnly, SerializeField] private int playerCount;
@@ -36,9 +38,17 @@ namespace Assets.Features.GameManagers
 
         private void Update()
         {
+            /*
+            for (int i = 0; i < battlePoints.Count - 2; i++)
+            {
+                battlePoints[i].CurBattleSide = BattleSide.Blue;
+                battlePoints[i].CurBattlePointPercent = 1;
+            }
+            */
             battlepointCount = battlePoints.Count;
             playerCount = players.Count;
             coverSpotCount = buildingCoverSpot.Count;
+            CheckGameEnd();
         }
 
 
@@ -212,6 +222,32 @@ namespace Assets.Features.GameManagers
                     newBot.aiInfo.SetBattleSide(side);
                 }
             }
+        }
+
+        private void CheckGameEnd()
+        {
+            BattleSide winner = BattleSide.None;
+            if (teamOwenPoints[0] == battlePoints.Count)
+            {
+                winner = BattleSide.Red;
+            }
+            else if (teamOwenPoints[1] == battlePoints.Count)
+            {
+                winner = BattleSide.Blue;
+            }
+
+            if (winner != BattleSide.None)
+            {
+                if (winner == playerData.BattleSide)
+                {
+                    BattlefieldUI.instance.ShowGameEndPanel("win");
+                }
+                else if (winner != playerData.BattleSide)
+                {
+                    BattlefieldUI.instance.ShowGameEndPanel("lose");
+                }
+            }
+
         }
     }
 }

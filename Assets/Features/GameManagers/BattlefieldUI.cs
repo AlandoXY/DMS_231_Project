@@ -9,6 +9,7 @@ namespace Assets.Features.GameManagers
     {
         [SerializeField] private List<BattlePointUIStatus> filledImgs = new List<BattlePointUIStatus>();
         [SerializeField] private TextMeshProUGUI blueTeamCountText, redTeamCountText;
+        [SerializeField] private GameObject winPanel, losePanel;
         public int pointNum => filledImgs.Count;
         public static BattlefieldUI instance;
 
@@ -44,6 +45,22 @@ namespace Assets.Features.GameManagers
         {
             blueTeamCountText.text = blue.ToString();
             redTeamCountText.text = red.ToString();
+        }
+
+        public void ShowGameEndPanel(string text)
+        {
+            switch (text)
+            {
+                case "win":
+                    winPanel.SetActive(true);
+                    losePanel.SetActive(false);
+                    break;
+                case "lose":
+                    winPanel.SetActive(false);
+                    losePanel.SetActive(true);
+                    break;
+            }
+            Time.timeScale = 0f;
         }
     }
 }

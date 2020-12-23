@@ -2,6 +2,7 @@
 using Alando.Features.Weapon;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using Assets.Features.BattleField;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,9 @@ namespace Alando.Features.MyFPController
         private WeaponData curWeapon;
         public CameraController cameraController;
         [SerializeField] private TMP_Text AmmoText;
+        [SerializeField] private LayerMask hitLayer;
+        [SerializeField] private BulletControl bullet;
+        [SerializeField] private Transform shootTransform;
 
         [Title("Weapon Recoil")]
         [SerializeField] private float maxRecoilDistance = 2f;
@@ -26,6 +30,7 @@ namespace Alando.Features.MyFPController
         [SerializeField] private float smooth = 10f;
 
         private Quaternion originSwayRotation;
+        private PlayerInfoData infoData;
 
 
 
@@ -48,6 +53,7 @@ namespace Alando.Features.MyFPController
             restAmmo = curWeapon.weapon.maxAmmoCapacity;
             weaponOrigin = weaponHandle.localPosition;
             originSwayRotation = weaponHandle.localRotation;
+            infoData = GetComponent<PlayerInfoData>();
             //weaponAccumulatedRecoil = weaponHandle.localPosition;
         }
 
@@ -219,7 +225,7 @@ namespace Alando.Features.MyFPController
         private void WeaponHit()
         {
             RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, transform.forward, out hitInfo, Mathf.Infinity,LayerMask.NameToLayer("BotLayer")))
+            if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 200f, hitLayer))
             {
                 IDamageable damageable = hitInfo.collider.GetComponent<IDamageable>();
                 Debug.Log($"{hitInfo.collider.transform.parent.name}:{hitInfo.collider.name}");
@@ -231,8 +237,11 @@ namespace Alando.Features.MyFPController
         private void HandleShoot()
         {
             KickBack(curWeapon.weapon.vRecoil, curWeapon.weapon.hRecoil, curWeapon.weapon.deployTime, fillingNum);
-            WeaponHit();
+            //WeaponHit();
             lastTime = Time.time;
+            Vector3 pos = shootTransform.position;
+            BulletControl newBullet = Instantiate(bullet,pos,shootTransform.rotation);
+            bullet.bulletSide = infoData.BattleSide;
         }
 
         private void ResetAmmo()

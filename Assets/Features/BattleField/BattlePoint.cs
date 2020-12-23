@@ -7,7 +7,8 @@ namespace Assets.Features.BattleField
     public enum BattleSide
     {
         Red = 0,
-        Blue = 1
+        Blue = 1,
+        None
     }
 
     public class BattlePoint : MonoBehaviour

@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponPrefab: {fileID: 0}
   fireDamage: 25
   magazineCapacity: 26
-  maxAmmoCapacity: 120
+  maxAmmoCapacity: 2147483647
   reloadTime: 1.95
   fillingTime: 0
   rpm: 770

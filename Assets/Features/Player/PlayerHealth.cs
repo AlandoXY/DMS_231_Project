@@ -8,20 +8,19 @@ namespace Alando.Features.Player
     {
         [SerializeField] private PlayerStats playerStats;
 
-        public int CurHealth { get; private set; }
+        public int CurHealth => curHealth;
 
-        public int DebugHealth;
+        [SerializeField]private int curHealth;
 
         private void Start()
         {
-            CurHealth = playerStats.maxHealth;
+            curHealth = playerStats.maxHealth;
         }
 
 
         public void DealDamage(int damage)
         {
-            CurHealth -= damage;
-            DebugHealth = CurHealth;
+            curHealth -= damage;
             CheckIfDead();
         }
 
